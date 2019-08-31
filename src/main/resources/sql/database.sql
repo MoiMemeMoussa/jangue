@@ -1,0 +1,56 @@
+--CREATE TABLE `level` (
+--  `level_id` int(11) NOT NULL AUTO_INCREMENT,
+--  `name` varchar(10 NOT NULL,
+--  PRIMARY KEY (`id`)
+--) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+--
+--CREATE TABLE `student` (
+--  `student_id` int(11) NOT NULL AUTO_INCREMENT,
+--  `matricule` varchar(10),
+--  `firstName` varchar(25) NOT NULL,
+--  `lastName` varchar(25) NOT NULL,
+--  `parent` varchar(50) DEFAULT NULL,
+--  `contact` int(9) DEFAULT NULL,
+--  `birthDate` DATE DEFAULT NULL,
+--  PRIMARY KEY (`matricule`)
+--) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+--
+----CREATE TABLE `history` (
+----  `historique_id` int(11) NOT NULL AUTO_INCREMENT,
+----  `student_id` int(11) NOT NULL,
+----  `level_id` int(11) NOT NULL,
+----  `date_start` DATE,
+----  `date_end` DATE,
+----  PRIMARY KEY (`student_id`,`level_id`,`date_start`,`date_end`),
+----) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+--
+--
+--CREATE TABLE `level_student` (
+-- `level_student_id` int(11) NOT NULL AUTO_INCREMENT,
+--  `level_id` int(11) NOT NULL,
+--  `student_id` int(11) NOT NULL,
+--  `start_date` DATE NOT NULL,
+--  `end_date` DATE NOT NULL,
+--  PRIMARY KEY (`level_id`,`student_id`),
+--  KEY `level_id` (`level_id`),
+--  CONSTRAINT `level_tudent_ibfk_1`
+--   FOREIGN KEY (`level_id`) REFERENCES `level` (`level_id`),
+--  CONSTRAINT `level_student_ibfk_2`
+--   FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
+--) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+--CREATE TABLE `payment` (
+--  `payment_id` int(11) NOT NULL AUTO_INCREMENT,
+--  `student_id` int(11) NOT NULL,
+--  `level_name` varchar(10) NOT NULL,
+--  `year` YEAR NOT NULL,
+--  `month` MONTH NOT NULL,
+--  `day`   DAY  NOT NULL,
+--  PRIMARY KEY (`student_id`,`mois`,`level_name`),
+--  KEY `student_id`,`mois`,`level_name`,
+--  CONSTRAINT `student_ibfk_1`
+--  FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
+--  CONSTRAINT `level_ibfk_2`
+--  FOREIGN KEY (`level_name`) REFERENCES `level` (`name`)
+--) ENGINE=InnoDB DEFAULT CHARSET=utf8;

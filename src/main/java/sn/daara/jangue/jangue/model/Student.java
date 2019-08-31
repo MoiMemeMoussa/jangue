@@ -2,35 +2,39 @@ package sn.daara.jangue.jangue.model;
 
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
-import java.util.Objects;
+import java.util.*;
 
+@Table(name = "student", catalog = "school", uniqueConstraints = @UniqueConstraint(columnNames = "matricule"))
 @Entity
-@Table(name = "student", catalog = "school")
 public class Student {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
 
-    private String key;
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "level_student",
+            joinColumns = @JoinColumn(name = "levelName"),
+            inverseJoinColumns = @JoinColumn(name = "matricule")
+    )
+    private Set<Level> levels = new HashSet<>();
+
     private String firstName;
     private String lastName;
     private String parent;
     private int contact;
     private Date birthDate;
+    @Id
+    private String matricule;
 
-    //@ManyToMany(mappedBy = "levelStudent",fetch = FetchType.LAZY)
-    @ManyToMany(mappedBy = "levelStudent")
-    private Level level;
 
     public Student() {
     }
 
-    public Student(Level level, int id, String registrationNumber, String firstName, String lastName, String parent, int contact, Date birthDate) {
-        this.level = level;
-        this.id = id;
-        this.key = registrationNumber;
+    public Student(String matricule, String firstName, String lastName, String parent, int contact, Date birthDate) {
+        this.matricule = matricule;
         this.firstName = firstName;
         this.lastName = lastName;
         this.parent = parent;
@@ -38,17 +42,16 @@ public class Student {
         this.birthDate = birthDate;
     }
 
-    @Column(name = "student_id", nullable = false, length = 11)
-    public int getId() {
-        return id;
+    @Column(name = "matricule", unique = true, nullable = false, length = 10)
+    public String getMatricule() {
+        return matricule;
     }
 
-    @Column(unique = true, name = "key", nullable = false, length = 20)
-    public String getKey() {
-        return key;
+    public void setMatricule(String matricule) {
+        this.matricule = matricule;
     }
 
-    @Column(name = "firstName", nullable = false, length = 25)
+    @Column(name = "first_name", nullable = false, length = 30)
     public String getFirstName() {
         return firstName;
     }
@@ -57,7 +60,7 @@ public class Student {
         this.firstName = firstName;
     }
 
-    @Column(name = "lastName", nullable = false, length = 25)
+    @Column(name = "last_name", nullable = false, length = 20)
     public String getLastName() {
         return lastName;
     }
@@ -66,7 +69,7 @@ public class Student {
         this.lastName = lastName;
     }
 
-    @Column(name = "parent", nullable = false, length = 50)
+    @Column(name = "parent", nullable = false, length = 40)
     public String getParent() {
         return parent;
     }
@@ -84,7 +87,8 @@ public class Student {
         this.contact = contact;
     }
 
-    @Column(name = "birthDate", nullable = false, length = 8)
+    @Temporal(TemporalType.DATE)
+    @Column(name = "birth_date", length = 8)
     public Date getBirthDate() {
         return birthDate;
     }
@@ -93,30 +97,42 @@ public class Student {
         this.birthDate = birthDate;
     }
 
+    public Set<Level> getLevels() {
+        return levels;
+    }
+
+    public void setLevels(Set<Level> levels) {
+        this.levels = levels;
+    }
+
+    public void addLevel(Level level) {
+        levels.add(level);
+        level.getStudents().add(this);
+    }
+
+    public void remove(Level level) {
+        levels.remove(level);
+        level.getStudents().remove(this);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return id == student.id &&
-                contact == student.contact &&
-                Objects.equals(key, student.key) &&
-                Objects.equals(firstName, student.firstName) &&
-                Objects.equals(lastName, student.lastName) &&
-                Objects.equals(parent, student.parent) &&
-                Objects.equals(birthDate, student.birthDate);
+        return
+                Objects.equals(matricule, student.matricule);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, key, firstName, lastName, parent, contact, birthDate);
+        return Objects.hash(matricule, firstName, lastName, parent, contact, birthDate);
     }
 
     @Override
     public String toString() {
         return "Student{" +
-                "id=" + id +
-                ", key='" + key + '\'' +
+                "matricule='" + matricule + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", parent='" + parent + '\'' +

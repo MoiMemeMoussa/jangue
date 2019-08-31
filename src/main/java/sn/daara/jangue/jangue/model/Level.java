@@ -2,41 +2,43 @@ package sn.daara.jangue.jangue.model;
 
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+@Table(name = "level", catalog = "school", uniqueConstraints = @UniqueConstraint(columnNames = "levelName"))
 @Entity
-@Table(name = "level", catalog = "school")
 public class Level {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private String name;
 
-    @ManyToMany
-    private List<Student> levelStudent;
+    @Id
+    private String levelName;
+
+    @ManyToMany(mappedBy = "levels")
+    private Set<Student> students = new HashSet<>();
 
     public Level() {
     }
 
-    public Level(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    @Column(name = "level_id", nullable = false, length = 8)
-    public int getId() {
-        return id;
+    public Level(String levelName) {
+        this.levelName = levelName;
     }
 
     @Column(name = "name", unique = true, nullable = false, length = 8)
-    public String getName() {
-        return this.name;
+    public String getLevelName() {
+        return this.levelName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 
     @Override
@@ -44,20 +46,19 @@ public class Level {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Level level = (Level) o;
-        return id == level.id &&
-                name.equals(level.name);
+        return levelName.equals(level.levelName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(levelName);
     }
 
     @Override
     public String toString() {
         return "Level{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "levelName='" + levelName + '\'' +
+                ", students=" + students +
                 '}';
     }
 }

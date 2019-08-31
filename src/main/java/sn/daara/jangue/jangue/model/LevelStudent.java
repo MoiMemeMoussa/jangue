@@ -1,19 +1,20 @@
 package sn.daara.jangue.jangue.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "level_student", catalog = "school", uniqueConstraints = @UniqueConstraint(columnNames = {"level_id", "student_id"}))
-public class LevelStudent {
+@Table(name = "level_student", catalog = "school", uniqueConstraints = @UniqueConstraint(columnNames = {"levelName", "matricule"}))
+public class LevelStudent implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private String levelName;
 
-    private Level level;
-    private Student student;
+    @Id
+    private String matricule;
+
     private Date startDate;
     private Date endDate;
 
@@ -21,31 +22,32 @@ public class LevelStudent {
     public LevelStudent() {
     }
 
-    public LevelStudent(Level level, Student student, Date startDate, Date endDate) {
-        this.level = level;
-        this.student = student;
+    public LevelStudent(String levelName, String matricule, Date startDate, Date endDate) {
+        this.levelName = levelName;
+        this.matricule = matricule;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    @Column(name = "level_id", nullable = false, length = 8)
-    public Level getLevel() {
-        return level;
+    @Column(name = "level_name", nullable = false, length = 8, unique = true)
+    public String getLevelName() {
+        return levelName;
     }
 
-    public void setLevel(Level level) {
-        this.level = level;
+    public void setLevelName(String level_name) {
+        this.levelName = level_name;
     }
 
-    @Column(name = "student_id", nullable = false, length = 11)
-    public Student getStudent() {
-        return student;
+    @Column(name = "matricule", nullable = false, length = 11, unique = true)
+    public String getMatricule() {
+        return matricule;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setMatricule(String matricule) {
+        this.matricule = matricule;
     }
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "start_date", nullable = false)
     public Date getStartDate() {
         return startDate;
@@ -55,6 +57,7 @@ public class LevelStudent {
         this.startDate = startDate;
     }
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "end_date", nullable = false)
     public Date getEndDate() {
         return endDate;
@@ -70,22 +73,20 @@ public class LevelStudent {
         if (o == null || getClass() != o.getClass()) return false;
         LevelStudent that = (LevelStudent) o;
         return
-                Objects.equals(level, that.level) &&
-                        Objects.equals(student, that.student) &&
-                        Objects.equals(startDate, that.startDate) &&
-                        Objects.equals(endDate, that.endDate);
+                Objects.equals(levelName, that.levelName) &&
+                        Objects.equals(matricule, that.matricule);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, level, student, startDate, endDate);
+        return Objects.hash(levelName, matricule, startDate, endDate);
     }
 
     @Override
     public String toString() {
         return "LevelStudent{" +
-                "level=" + level +
-                ", student=" + student +
+                "levelName=" + levelName +
+                ", matricule=" + matricule +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 '}';
