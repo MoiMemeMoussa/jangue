@@ -10,7 +10,6 @@ import java.util.Set;
 @Entity
 public class Level {
 
-
     @Id
     private String levelName;
 
@@ -24,7 +23,7 @@ public class Level {
         this.levelName = levelName;
     }
 
-    @Column(name = "name", unique = true, nullable = false, length = 8)
+    @Column(name = "level_name", unique = true, nullable = false, length = 8)
     public String getLevelName() {
         return this.levelName;
     }

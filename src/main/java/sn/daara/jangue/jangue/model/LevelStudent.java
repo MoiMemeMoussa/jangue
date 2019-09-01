@@ -6,14 +6,20 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
+@IdClass(LevelStudentId.class)
 @Table(name = "level_student", catalog = "school", uniqueConstraints = @UniqueConstraint(columnNames = {"levelName", "matricule"}))
 public class LevelStudent implements Serializable {
+
 
     @Id
     private String levelName;
 
     @Id
     private String matricule;
+
+    private String oldMatricule;
+
+    private int mountant = 0;
 
     private Date startDate;
     private Date endDate;
@@ -22,9 +28,11 @@ public class LevelStudent implements Serializable {
     public LevelStudent() {
     }
 
-    public LevelStudent(String levelName, String matricule, Date startDate, Date endDate) {
+    public LevelStudent(String levelName, String oldMatricule, String matricule, int mountant, Date startDate, Date endDate) {
         this.levelName = levelName;
+        this.oldMatricule = oldMatricule;
         this.matricule = matricule;
+        this.mountant = mountant;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -38,6 +46,15 @@ public class LevelStudent implements Serializable {
         this.levelName = level_name;
     }
 
+    @Column(name = "old_matricule", length = 11)
+    public String getOldMatricule() {
+        return oldMatricule;
+    }
+
+    public void setOldMatricule(String oldMatricule) {
+        this.oldMatricule = oldMatricule;
+    }
+
     @Column(name = "matricule", nullable = false, length = 11, unique = true)
     public String getMatricule() {
         return matricule;
@@ -47,8 +64,17 @@ public class LevelStudent implements Serializable {
         this.matricule = matricule;
     }
 
+    @Column(name = "scolarite", nullable = false, length = 11)
+    public int getMountant() {
+        return mountant;
+    }
+
+    public void setMountant(int mountant) {
+        this.mountant = mountant;
+    }
+
     @Temporal(TemporalType.DATE)
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date")
     public Date getStartDate() {
         return startDate;
     }
@@ -58,7 +84,7 @@ public class LevelStudent implements Serializable {
     }
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date")
     public Date getEndDate() {
         return endDate;
     }
@@ -86,7 +112,9 @@ public class LevelStudent implements Serializable {
     public String toString() {
         return "LevelStudent{" +
                 "levelName=" + levelName +
+                "oldMatricule=" + oldMatricule +
                 ", matricule=" + matricule +
+                ", mountant=" + mountant +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 '}';

@@ -1,0 +1,27 @@
+<!DOCTYpe html>
+<html xmlns:th="http://www.springframework.org/schema/data/jaxb">
+<head>
+    <title></title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div id="login">
+    <h1>Connexion
+        <hr>
+    </h1>
+    <form action="/daara/login"></form>
+    <p>
+        <label>Identifiant: </label><br>
+        <input name="login" size="25" type="text">
+    </p>
+    <p>
+        <label>Mot de passe : </label><br>
+        <input name="password" size="25" type="text">
+    </p>
+    <p>
+        <input style="background:#000; color:#ffff" type="submit" value="Connexion">
+    </p>
+</div>
+</body>
+</body>
+</html>

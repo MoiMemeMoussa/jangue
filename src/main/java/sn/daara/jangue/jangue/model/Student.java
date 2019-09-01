@@ -2,9 +2,10 @@ package sn.daara.jangue.jangue.model;
 
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Table(name = "student", catalog = "school", uniqueConstraints = @UniqueConstraint(columnNames = "matricule"))
 @Entity
@@ -19,10 +20,11 @@ public class Student {
             joinColumns = @JoinColumn(name = "levelName"),
             inverseJoinColumns = @JoinColumn(name = "matricule")
     )
-    private Set<Level> levels = new HashSet<>();
+    private List<Level> levels = new ArrayList<>();
 
     private String firstName;
     private String lastName;
+    private char genre;
     private String parent;
     private int contact;
     private Date birthDate;
@@ -33,10 +35,11 @@ public class Student {
     public Student() {
     }
 
-    public Student(String matricule, String firstName, String lastName, String parent, int contact, Date birthDate) {
+    public Student(String matricule, String firstName, String lastName, char genre, String parent, int contact, Date birthDate) {
         this.matricule = matricule;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.genre = genre;
         this.parent = parent;
         this.contact = contact;
         this.birthDate = birthDate;
@@ -69,6 +72,15 @@ public class Student {
         this.lastName = lastName;
     }
 
+    @Column(name = "genre", nullable = false, length = 1)
+    public char getGenre() {
+        return genre;
+    }
+
+    public void setGenre(char genre) {
+        this.genre = genre;
+    }
+
     @Column(name = "parent", nullable = false, length = 40)
     public String getParent() {
         return parent;
@@ -97,11 +109,11 @@ public class Student {
         this.birthDate = birthDate;
     }
 
-    public Set<Level> getLevels() {
+    public List<Level> getLevels() {
         return levels;
     }
 
-    public void setLevels(Set<Level> levels) {
+    public void setLevels(List<Level> levels) {
         this.levels = levels;
     }
 
@@ -135,6 +147,7 @@ public class Student {
                 "matricule='" + matricule + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", genre='" + genre + '\'' +
                 ", parent='" + parent + '\'' +
                 ", contact=" + contact +
                 ", birthDate=" + birthDate +
